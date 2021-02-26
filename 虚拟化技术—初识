@@ -16,5 +16,12 @@
 
     Hypervisor模型
     在hypervisor模型中，VMM是一个完整的操作系统，它除了具备传统操作系统的功能之外，还具备虚拟化功能。由于需要将物理资源进行虚拟化，所以包括CPU、内存和IO设备在内的所有的物理资源都归VMM所有，对于CPU调度、页面调度等还是归传统操作系统控制管理。
+    ![image](https://github.com/zhaojs007/Virtualization_Tech-Study/blob/main/Virtualization_pictures/hypervisor.jpg)
+    该模型是比较高效的，然而缺点也是很明显的，即IO设备种类繁多，管理所有的设备需要大量的驱动开发工作。（由于内核做了修改，开发商提供的驱动程序大部分是基于现有OS（比如说centos、ubuntu等）系统的驱动，需要大量的适配工作等）
     
+    Host模型（宿主机模型）
+    在Host模型中，物理资源是由传统OS来掌管，由于传统OS并不完全是为了虚拟化而设计的，因此实际的虚拟化功能需要VMM来提供。根据VMM要做的事情，VMM定位应该是Host OS中内核模块的一部分。为了获取物理资源，这就需要通过调用传统OS的服务来获取相应的信息，实现CPU、内存、IO设备的虚拟化。因此，VMM创建出虚机之后，通常将虚机作为host os的一个进程参与调度管理。
+    ![image](https://github.com/zhaojs007/Virtualization_Tech-Study/blob/main/Virtualization_pictures/host-module.jpg)
     
+    Host模型最大的优点就是可以充分利用现有操作系统的设备驱动程序，VMM不需要为各种IO设备重新实现驱动，可以更加专注于物理资源虚拟化的优化工作。缺点也是明显的，由于虚拟化过程中需要HOST OS提供服务，从而可能导致硬件利用不充分。
+    从架构上看，KVM(Kernel-based Virtual Machine)就是属于HOST模型。
